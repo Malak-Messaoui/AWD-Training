@@ -29,7 +29,8 @@ class CandidatApiIntegrationTest {
              "address":{"street":"Avenue Habib Bourguiba","houseNumber":"12","zipCode":"1001"}}
             """;
 
-    private long post(String url, String body) throws Exception {
+    // Renommée : "post" masquait la méthode statique post(...) de MockMvcRequestBuilders
+    private long createAndGetId(String url, String body) throws Exception {
         String json = mvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
@@ -39,7 +40,7 @@ class CandidatApiIntegrationTest {
 
     @Test
     void createCandidateWithAddressAndReadIt() throws Exception {
-        long id = post("/api/candidates", CANDIDATE_WITH_ADDRESS);
+        long id = createAndGetId("/api/candidates", CANDIDATE_WITH_ADDRESS);
 
         mvc.perform(get("/api/candidates/" + id))
                 .andExpect(status().isOk())
@@ -63,7 +64,7 @@ class CandidatApiIntegrationTest {
 
     @Test
     void duplicateEmailReturns409() throws Exception {
-        post("/api/candidates", CANDIDATE_WITH_ADDRESS);
+        createAndGetId("/api/candidates", CANDIDATE_WITH_ADDRESS);
         mvc.perform(post("/api/candidates").contentType(MediaType.APPLICATION_JSON)
                         .content("{\"firstname\":\"A\",\"lastname\":\"B\",\"email\":\"BADIA@example.com\"}"))
                 .andExpect(status().isConflict());
@@ -77,7 +78,7 @@ class CandidatApiIntegrationTest {
 
     @Test
     void updateCandidateAndAddress() throws Exception {
-        long id = post("/api/candidates", CANDIDATE_WITH_ADDRESS);
+        long id = createAndGetId("/api/candidates", CANDIDATE_WITH_ADDRESS);
         mvc.perform(put("/api/candidates/" + id).contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {"firstname":"Badia","lastname":"A.","email":"badia@example.com",
@@ -93,9 +94,9 @@ class CandidatApiIntegrationTest {
 
     @Test
     void assignUnlinkAndDeleteAddress() throws Exception {
-        long candidateId = post("/api/candidates",
+        long candidateId = createAndGetId("/api/candidates",
                 "{\"firstname\":\"Sami\",\"lastname\":\"Ben\",\"email\":\"sami@example.com\"}");
-        long addressId = post("/api/addresses",
+        long addressId = createAndGetId("/api/addresses",
                 "{\"street\":\"Rue de Rome\",\"houseNumber\":\"3\",\"zipCode\":\"1000\"}");
 
         mvc.perform(put("/api/candidates/" + candidateId + "/address/" + addressId))
@@ -103,7 +104,7 @@ class CandidatApiIntegrationTest {
                 .andExpect(jsonPath("$.address.id").value(addressId));
 
         // a second candidate cannot take the same address (one-to-one)
-        long other = post("/api/candidates",
+        long other = createAndGetId("/api/candidates",
                 "{\"firstname\":\"Lina\",\"lastname\":\"K\",\"email\":\"lina@example.com\"}");
         mvc.perform(put("/api/candidates/" + other + "/address/" + addressId))
                 .andExpect(status().isConflict());
@@ -126,7 +127,7 @@ class CandidatApiIntegrationTest {
 
     @Test
     void deletingCandidateAlsoDeletesItsAddress() throws Exception {
-        long id = post("/api/candidates", CANDIDATE_WITH_ADDRESS);
+        long id = createAndGetId("/api/candidates", CANDIDATE_WITH_ADDRESS);
         mvc.perform(delete("/api/candidates/" + id)).andExpect(status().isNoContent());
         mvc.perform(get("/api/candidates/" + id)).andExpect(status().isNotFound());
         mvc.perform(get("/api/addresses")).andExpect(jsonPath("$.length()").value(0));

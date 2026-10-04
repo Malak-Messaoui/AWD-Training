@@ -24,7 +24,8 @@ class JobApiIntegrationTest {
     @Autowired
     private ObjectMapper mapper;
 
-    private long post(String url, String body) throws Exception {
+    // Renommée : "post" masquait la méthode statique post(...) de MockMvcRequestBuilders
+    private long createAndGetId(String url, String body) throws Exception {
         String json = mvc.perform(post(url).contentType(MediaType.APPLICATION_JSON).content(body))
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
@@ -32,11 +33,11 @@ class JobApiIntegrationTest {
     }
 
     private long category(String name) throws Exception {
-        return post("/api/categories", "{\"name\":\"" + name + "\",\"description\":\"desc\"}");
+        return createAndGetId("/api/categories", "{\"name\":\"" + name + "\",\"description\":\"desc\"}");
     }
 
     private long job(String name, boolean available, String date, long categoryId) throws Exception {
-        return post("/api/jobs", """
+        return createAndGetId("/api/jobs", """
                 {"name":"%s","description":"d","available":%s,"date":"%s","categoryId":%d}
                 """.formatted(name, available, date, categoryId));
     }
