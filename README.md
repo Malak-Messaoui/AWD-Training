@@ -21,7 +21,7 @@
  
 Les services **CANDIDAT**, **JOB**, **MEETING** et **NOTIFICATION** sont enregistrés en même temps, avec **plusieurs instances** (ports différents) :
  
-![Dashboard Eureka](docs/eureka-dashboard.png)
+![Dashboard Eureka](eureka-dashboard.png)
  
 ---
 
