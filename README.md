@@ -7,6 +7,23 @@
 🏢 **Unité pédagogique : UP WEB**
 
 ---
+## 👥 Équipe
+ 
+| Membre |
+|---|
+| Malak Messaoui |
+| Safa Hamdi |
+| Sarra Ouertani |
+| Houcem Dridi |
+| Med Aziz Ouertateni |
+
+## 📸 Dashboard Eureka
+ 
+Les services **CANDIDAT**, **JOB**, **MEETING** et **NOTIFICATION** sont enregistrés en même temps, avec **plusieurs instances** (ports différents) :
+ 
+![Dashboard Eureka](docs/eureka-dashboard.png)
+ 
+---
 
 ## 📘 Présentation du module
 
@@ -379,6 +396,8 @@ Le module **Applications Web Distribuées** est dispensé à l’[École d’Ing
 - [Profil ResearchGate](https://www.researchgate.net/profile/Badia-Bouhdid)
 
 ---
+
+
 
 ## 📝 Message aux étudiants
 
