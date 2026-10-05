@@ -16,6 +16,7 @@
 | Sarra Ouertani |
 | Houcem Dridi |
 | Med Aziz Ouertateni |
+| Rayhanne Fahem |
 
 ## 📸 Dashboard Eureka
  
